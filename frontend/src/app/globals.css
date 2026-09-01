@@ -1,26 +1,117 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ------------------------------------------------------------------
+   EMS Analytics design tokens — industrial / utility dashboard palette.
+   Fixed light theme: control-room screens are calibrated, not themed.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-navy-900: #07253a;
+  --color-navy-800: #092e47;
+  --color-navy-700: #0b3550;
+  --color-navy-600: #14486a;
+
+  --color-canvas: #f6f8f9;
+  --color-surface: #ffffff;
+  --color-hairline: #e2e8ed;
+
+  --color-teal: #1c7293;
+  --color-teal-soft: #e8f1f5;
+
+  --color-amber: #f2a20c;
+  --color-amber-dark: #d18c05;
+  --color-amber-soft: #fdf3de;
+
+  --color-up: #c0392b;
+  --color-up-soft: #fbeceb;
+  --color-down: #2e9e6d;
+  --color-down-soft: #e9f6f0;
+
+  --color-ink: #10222e;
+  --color-ink-muted: #5b6b78;
+  --color-ink-faint: #8b9aa6;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html,
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* Figures line up column-to-column across the whole app. */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Newly revealed tree rows ease in rather than snapping into place.
+   Table rows can't be height-animated reliably, so depth-aware fade+slide
+   is the honest approximation of an expand transition. */
+@keyframes row-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.row-reveal {
+  animation: row-reveal 160ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .row-reveal {
+    animation: none;
+  }
+}
+
+/* Thin scrollbar for the horizontal table overflow on tablet widths. */
+.scroll-slim {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline) transparent;
+}
+.scroll-slim::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scroll-slim::-webkit-scrollbar-thumb {
+  background: #cfd8e0;
+  border-radius: 4px;
+}
+.scroll-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Inline equipment panel opens by animating its grid track from 0fr to 1fr,
+   which transitions to content height without hardcoding a max-height. */
+@keyframes panel-reveal {
+  from {
+    grid-template-rows: 0fr;
+    opacity: 0;
+  }
+  to {
+    grid-template-rows: 1fr;
+    opacity: 1;
+  }
+}
+
+.panel-reveal {
+  display: grid;
+  grid-template-rows: 1fr;
+  animation: panel-reveal 200ms ease-out both;
+}
+
+.panel-reveal > * {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-reveal {
+    animation: none;
+  }
 }
