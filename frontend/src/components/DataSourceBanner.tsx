@@ -47,19 +47,24 @@ export function DataSourceBanner({ source, reason, error }: DataSourceBannerProp
     );
   }
 
+  // The audience for this banner is whoever is looking at the screen — often
+  // not the person who will wire up the meters. So it says what the figures
+  // are, in plain language, and keeps the wiring diagnostics one hover away
+  // (in `title`) rather than leading with a file path.
   return (
     <div
       role="status"
       data-testid="source-banner"
       data-source="simulation"
+      title={reason}
       className="mb-3 flex flex-wrap items-baseline gap-x-2 gap-y-1 rounded-md border border-amber/40 bg-amber-soft px-3.5 py-2.5 text-[12px]"
     >
-      <span className="font-semibold text-navy-700">Simulated data</span>
+      <span className="font-semibold text-navy-700">Demonstration data</span>
       <span className="text-ink-muted">
-        {reason ?? "IOsense is not connected."}
+        Representative figures showing how the dashboard works — not plant readings.
       </span>
       <span className="text-ink-faint">
-        These figures are generated for demonstration and are not plant readings.
+        Live telemetry appears here once meter mapping is complete.
       </span>
     </div>
   );
